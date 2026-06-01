@@ -1,18 +1,24 @@
 package practice;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PracticeTest {
     @Test
-    public void testGreet() {
-        Practice practice = new Practice();
-        assertEquals("Hello, Java", practice.greet("Java"));
+    public void testAdd() {
+        Practice p = new Practice();
+        assertEquals(5, p.add(2, 3));
     }
 
     @Test
-    public void testAdd() {
-        Practice practice = new Practice();
-        assertEquals(5, practice.add(2, 3));
+    public void testSubtract() {
+        Practice p = new Practice();
+        assertEquals(1, p.subtract(3, 2));
+    }
+
+    @Test
+    public void testMultiply() {
+        Practice p = new Practice();
+        assertEquals(6, p.multiply(2, 3));
     }
 }
