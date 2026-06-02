@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PracticeTest {
+
     @Test
     public void testAdd() {
         Practice p = new Practice();
@@ -14,5 +15,11 @@ public class PracticeTest {
     public void testSubtract() {
         Practice p = new Practice();
         assertEquals(1, p.subtract(3, 2));
+    }
+
+    @Test
+    public void testMultiply() {
+        Practice p = new Practice();
+        assertEquals(6, p.multiply(2, 3));
     }
 }
