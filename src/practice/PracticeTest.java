@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PracticeTest {
+
     @Test
     public void testAdd() {
         Practice p = new Practice();
