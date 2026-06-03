@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PracticeTest {
 
     @Test
-    public void testAdd() {
+    public void testAdd1() {
         Practice p = new Practice();
         assertEquals(5, p.add(2, 3));
     }
