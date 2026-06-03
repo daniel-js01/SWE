@@ -6,6 +6,8 @@ pipeline {
         JUNIT_JAR_PATH = 'lib/junit.jar'
         CLASS_DIR = 'classes'
         REPORT_DIR = 'test-reports'
+        GIT_AUTHOR = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
+    	GIT_COMMIT_MSG = sh(script: 'git log -1 --pretty=format:"%s"', returnStdout: true).trim()
     }
 
     stages {
@@ -61,11 +63,49 @@ pipeline {
             junit "${REPORT_DIR}/**/*.xml"
             archiveArtifacts artifacts: "${REPORT_DIR}/**/*", allowEmptyArchive: true
         }
-        failure {
-            echo "Build or test failed"
-        }
         success {
-            echo "Build and test succeeded"
-        }
-    }
+    		echo "Build and test succeeded"
+    		script {
+        		def testOutput = readFile("${REPORT_DIR}/test-output.txt")
+        		mail to: 'whitecolor2001@gmail.com',
+             		subject: "[Jenkins] BUILD SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             		body: """
+Build completed successfully!
+
+- Project: ${env.JOB_NAME}
+- Build Number: ${env.BUILD_NUMBER}
+- Build URL: ${env.BUILD_URL}
+- Pushed by: ${env.GIT_AUTHOR}
+- Commit: ${env.GIT_COMMIT_MSG}
+
+=============================
+Test Results
+=============================
+${testOutput}
+"""
+    		}
+		}
+		failure {
+    		echo "Build or test failed"
+    		script {
+        		def testOutput = fileExists("${REPORT_DIR}/test-output.txt") ? readFile("${REPORT_DIR}/test-output.txt") : "No test output available"
+        		mail to: 'whitecolor2001@gmail.com',
+             		subject: "[Jenkins] BUILD FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             		body: """
+Build failed!
+
+- Project: ${env.JOB_NAME}
+- Build Number: ${env.BUILD_NUMBER}
+- Build URL: ${env.BUILD_URL}
+- Pushed by: ${env.GIT_AUTHOR}
+- Commit: ${env.GIT_COMMIT_MSG}
+
+=============================
+Test Results
+=============================
+${testOutput}
+"""
+    		}
+		}
+	}
 }
