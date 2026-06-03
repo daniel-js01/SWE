@@ -15,4 +15,16 @@ public class PracticeTest {
         Practice p = new Practice();
         assertEquals(1, p.subtract(3, 2));
     }
+
+    @Test
+    public void testMultiply() {
+        Practice p = new Practice();
+        assertEquals(6, p.multiply(2, 3));
+    }
+
+    @Test
+    public void testDivide() {
+        Practice p = new Practice();
+        assertEquals(2, p.divide(6, 3));
+    }
 }
