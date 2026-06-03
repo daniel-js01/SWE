@@ -1,15 +1,13 @@
 package practice;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 public class PracticeTest {
     @Test
     public void testAdd() {
         Practice p = new Practice();
         assertEquals(5, p.add(2, 3));
     }
-
+  
     @Test
     public void testSubtract() {
         Practice p = new Practice();
@@ -25,6 +23,12 @@ public class PracticeTest {
     @Test
     public void testDivide() {
         Practice p = new Practice();
-        assertEquals(2, p.divide(6, 3));
+        assertEquals(3, p.divide(6, 2));
+    }
+  
+    @Test
+    public void testDivideByZero() {
+        Practice p = new Practice();
+        assertThrows(ArithmeticException.class, () -> p.divide(6, 0));
     }
 }
