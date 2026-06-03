@@ -62,28 +62,44 @@ pipeline {
             archiveArtifacts artifacts: "${REPORT_DIR}/**/*", allowEmptyArchive: true
         }
         success {
-            echo "Build and test succeeded"
-            mail to: 'whitecolor2001@gmail.com',
-                 subject: "[Jenkins] ✅ 빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: """
-빌드가 성공적으로 완료되었습니다!
+    		echo "Build and test succeeded"
+    		script {
+        		def testOutput = readFile("${REPORT_DIR}/test-output.txt")
+        		mail to: 'whitecolor2001@gmail.com',
+             		subject: "[Jenkins] BUILD SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             		body: """
+Build completed successfully!
 
-- 프로젝트: ${env.JOB_NAME}
-- 빌드 번호: ${env.BUILD_NUMBER}
-- 빌드 URL: ${env.BUILD_URL}
-"""
-        }
-        failure {
-            echo "Build or test failed"
-            mail to: 'whitecolor2001@gmail.com',
-                 subject: "[Jenkins] ❌ 빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: """
-빌드가 실패했습니다!
+- Project: ${env.JOB_NAME}
+- Build Number: ${env.BUILD_NUMBER}
+- Build URL: ${env.BUILD_URL}
 
-- 프로젝트: ${env.JOB_NAME}
-- 빌드 번호: ${env.BUILD_NUMBER}
-- 빌드 URL: ${env.BUILD_URL}
+=============================
+Test Results
+=============================
+${testOutput}
 """
-        }
-    }
+    		}
+		}
+		failure {
+    		echo "Build or test failed"
+    		script {
+        		def testOutput = fileExists("${REPORT_DIR}/test-output.txt") ? readFile("${REPORT_DIR}/test-output.txt") : "No test output available"
+        		mail to: 'whitecolor2001@gmail.com',
+             		subject: "[Jenkins] BUILD FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             		body: """
+Build failed!
+
+- Project: ${env.JOB_NAME}
+- Build Number: ${env.BUILD_NUMBER}
+- Build URL: ${env.BUILD_URL}
+
+=============================
+Test Results
+=============================
+${testOutput}
+"""
+    		}
+		}
+	}
 }
