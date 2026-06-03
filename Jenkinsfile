@@ -6,6 +6,8 @@ pipeline {
         JUNIT_JAR_PATH = 'lib/junit.jar'
         CLASS_DIR = 'classes'
         REPORT_DIR = 'test-reports'
+        GIT_AUTHOR = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
+    	GIT_COMMIT_MSG = sh(script: 'git log -1 --pretty=format:"%s"', returnStdout: true).trim()
     }
 
     stages {
@@ -73,6 +75,8 @@ Build completed successfully!
 - Project: ${env.JOB_NAME}
 - Build Number: ${env.BUILD_NUMBER}
 - Build URL: ${env.BUILD_URL}
+- Pushed by: ${env.GIT_AUTHOR}
+- Commit: ${env.GIT_COMMIT_MSG}
 
 =============================
 Test Results
@@ -93,6 +97,8 @@ Build failed!
 - Project: ${env.JOB_NAME}
 - Build Number: ${env.BUILD_NUMBER}
 - Build URL: ${env.BUILD_URL}
+- Pushed by: ${env.GIT_AUTHOR}
+- Commit: ${env.GIT_COMMIT_MSG}
 
 =============================
 Test Results
